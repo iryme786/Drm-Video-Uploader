@@ -43,29 +43,36 @@ def process_txt_file():
         lines = file.readlines()
 
     for index, url in enumerate(lines):
-        m3u8_url = url.strip()
-        if not m3u8_url:
+        url = url.strip()
+        if not url:
             continue
 
-        print(f"🔍 Processing ({index + 1}) {m3u8_url}")
-
         try:
-            key_hex = extract_key(m3u8_url)
-            if not key_hex:
-                print("❌ Key not found. Skipping.")
-                continue
-
-            filename = f"video_{index + 1}.mp4"
-            decrypt_video(m3u8_url, key_hex, filename)
-
-            # Upload to Telegram channel
-            bot.send_video(CHANNEL_ID, video=filename, caption=f"📽️ Video {index + 1}")
-            print(f"✅ Uploaded {filename}")
-
-            os.remove(filename)
-
+            if url.endswith(".pdf"):
+                print(f"📄 Downloading PDF {url}")
+                pdf_filename = f"file_{index + 1}.pdf"
+                response = requests.get(url)
+                with open(pdf_filename, "wb") as f:
+                    f.write(response.content)
+                bot.send_document(CHANNEL_ID, document=pdf_filename, caption=f"📄 PDF {index + 1}")
+                os.remove(pdf_filename)
+                print("✅ Uploaded PDF")
+            elif url.endswith(".m3u8"):
+                print(f"🎞️ Processing DRM Video: {url}")
+                key_hex = extract_key(url)
+                if not key_hex:
+                    print("❌ Key not found. Skipping.")
+                    continue
+                video_file = f"video_{index + 1}.mp4"
+                decrypt_video(url, key_hex, video_file)
+                bot.send_video(CHANNEL_ID, video=video_file, caption=f"📽️ Video {index + 1}")
+                os.remove(video_file)
+                print("✅ Uploaded Video")
+            else:
+                print(f"❓ Unknown file type: {url}")
         except Exception as e:
-            print(f"⚠️ Failed: {str(e)}")
+            print(f"⚠️ Error with {url}: {str(e)}")
+            
 
 with bot:
     process_txt_file()
