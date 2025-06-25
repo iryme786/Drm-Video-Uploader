@@ -57,8 +57,7 @@ async def upload_all(client, message: Message):
                     await message.reply(f"⚠️ Unknown file type: {url}")
 
             except Exception as e:
-                await message.reply(f"⚠️ Error with {url}:
-{str(e)}")
+                await message.reply(f"⚠️ Error with {url}:{str(e)}")
 
         await message.reply("✅ All files processed.")
 
