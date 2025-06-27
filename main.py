@@ -8,10 +8,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_ID = int(os.environ.get("21563841")),
-API_HASH = os.environ.get("aa468717ecb3153d47dba2d9be6eb90d"),
-BOT_TOKEN = os.environ.get("8157490670:AAH96od7VTsjHmMP-4f4tOHewpHTAqWKEv8"),
-CHANNEL_ID = os.environ.get("-1002556958706")
+API_ID = int(os.environ.get("29320367")),
+API_HASH = os.environ.get("f8083ef747c160b7eb41095454f59f92"),
+BOT_TOKEN = os.environ.get(":"),
+CHANNEL_ID = os.environ.get("-1002899394182")
 
 bot = Client("drm_uploader", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
